@@ -136,3 +136,47 @@ const login = async (req, res) => {
         
     };
 }
+
+
+/*
+@route POST/api/auth/logout
+*/
+
+
+const logout = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+
+        user.refreshToken = null;
+
+        await user.save();
+
+        res.json({
+            success: true,
+            message: "Logout successful",
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+        
+    };
+
+};
+
+
+/*
+@route GET/api/auth/me
+
+*/
+
+const getProfile = async (req, res) => {
+    res.json({
+        success: true,
+        user: req.user,
+    });
+};
+
+export {register, login, logout, getProfile};
