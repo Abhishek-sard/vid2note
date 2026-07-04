@@ -8,6 +8,8 @@ import morgan from "morgan";
 import notFound from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
+import authRoutes from "./routes/authRoutes.js";
+
 const app = express();
 app.use(express.json());
 
@@ -32,6 +34,8 @@ app.get("/", (req, res) => {
         message: "video Notes AI API Running"
     });
 });
+
+app.use("/api/auth", authRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
