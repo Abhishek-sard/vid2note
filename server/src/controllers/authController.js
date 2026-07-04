@@ -85,7 +85,7 @@ const login = async (req, res) => {
         if(!errors.isEmpty()){
             return res.status(400).json({
                 success: false,
-                errors: errors.array();
+                errors: errors.array(),
             });
         }
         const {email, password} = req.body;
