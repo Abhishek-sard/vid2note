@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import {
-    generateAccessToken,
+    generateToken,
     generateRefreshToken,
 } from "../utils/generateToken.js";
 import {validationResult} from "express-validator";
