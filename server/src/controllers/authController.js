@@ -179,4 +179,4 @@ const getProfile = async (req, res) => {
     });
 };
 
-export {register, login, logout, getProfile};
+export default {register, login, logout, getProfile};
