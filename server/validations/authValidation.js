@@ -28,3 +28,5 @@ const loginValidation = [
     .notEmpty()
     .withMessage("Password is required"),
 ];
+
+export {registerValidation, loginValidation};
