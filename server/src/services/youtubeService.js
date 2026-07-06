@@ -1,7 +1,7 @@
  const getVideoId = (url) => {
 
   const regExp =
-    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    /^.*(youtube\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
 
   const match = url.match(regExp);
 
@@ -10,4 +10,4 @@
     : null;
 };
 
-export default getVideoId;
+export  {getVideoId};

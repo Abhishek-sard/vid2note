@@ -5,7 +5,7 @@ import {getVideoId} from "../services/youtubeService.js";
 
 const addYoutubeVideo = async (req, res) => {
     try {
-        const errors = validatoinResult(req);
+        const errors = validationResult(req);
 
 
         if(!errors.isEmpty()){
