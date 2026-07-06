@@ -8,4 +8,4 @@ const youtubeValidation = [
     .withMessage("Invalid URL"),
 ];
 
-export default youtubeValidation;
+export  {youtubeValidation};

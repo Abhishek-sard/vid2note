@@ -54,4 +54,4 @@ const addYoutubeVideo = async (req, res) => {
         
     }
 };
-export default {addYoutubeVideo};
+export  {addYoutubeVideo};
