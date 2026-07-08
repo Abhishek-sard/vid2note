@@ -1,6 +1,7 @@
 import Video from '../models/Video.js';
 import {validationResult} from 'express-validator';
 import {getVideoId} from "../services/youtubeService.js";
+import {generateNotes} from "../services/geminiService.js";
 
 
 const addYoutubeVideo = async (req, res) => {
@@ -54,4 +55,27 @@ const addYoutubeVideo = async (req, res) => {
         
     }
 };
-export  {addYoutubeVideo};
+
+const generateVideoNotes = async (req, res) => {
+    try{
+        const {title, transcript} = req.body;
+        const notes = await generateNotes(transcript);
+
+        const video = await Video.create({
+            title,
+            transcript,
+            summary: notes.summary,
+            keyPoints: notes.keyPoints,
+            flashcards: notes.flashcards,
+            mcqs: notes.mcqs,
+            createBy: req.user._id,
+        });
+
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+export  {addYoutubeVideo, generateVideoNotes};
