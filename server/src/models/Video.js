@@ -34,6 +34,26 @@ const videoSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },
+        summary: {
+            type: String,
+            default: "",
+        },
+        keyPoints: [
+            String
+        ],
+        flashcards: [
+            {
+                question: String,
+                answer: String,
+            }
+        ],
+        mcqs: [
+            {
+                question: String,
+                options: [String],
+                answer: String
+            }
+        ],
     },
     {
         timestamps: true,
