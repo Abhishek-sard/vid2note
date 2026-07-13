@@ -30,7 +30,7 @@ interface AuthState {
   loadUser: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+ const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
   loading: false,
@@ -125,3 +125,5 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 }));
+
+export {useAuthStore};
