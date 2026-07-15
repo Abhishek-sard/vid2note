@@ -37,7 +37,7 @@ export default function RegisterScreen() {
 
       await register(name, email, password);
 
-      router.replace("/(tabs)/home");
+      router.replace("/");
     } catch (error: any) {
       Alert.alert(
         "Registration Failed",
@@ -89,7 +89,7 @@ export default function RegisterScreen() {
 
         <Text style={styles.footer}>
           Already have an account?{" "}
-          <Link href="/(auth)/login" style={styles.link}>
+          <Link href="/auth/login" style={styles.link}>
             Login
           </Link>
         </Text>

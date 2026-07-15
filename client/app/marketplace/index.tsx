@@ -13,9 +13,9 @@ export default function Index() {
       await loadUser();
 
       if (isAuthenticated) {
-        router.replace("/(tabs)/home");
+        router.replace("/");
       } else {
-        router.replace("/(auth)/login");
+        router.replace("/auth/login");
       }
     };
 

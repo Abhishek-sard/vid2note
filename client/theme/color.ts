@@ -17,10 +17,12 @@ const Colors = {
 
     textPrimary: '#111827',
     textSecondary: '#6B7280',
+    // alias for backward compatibility
+    text: '#111827',
 
     border: '#E5E7EB',
 
-    inputBackground: 'FFFFFF',
+    inputBackground: '#FFFFFF',
 
     placeholder: '#9CA3AF',
 

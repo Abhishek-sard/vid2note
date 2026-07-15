@@ -36,7 +36,7 @@ export default function LoginScreen() {
 
       await login(email, password);
 
-      router.replace("/(tabs)/home");
+      router.replace("/");
     } catch (error: any) {
       Alert.alert(
         "Login Failed",
@@ -81,7 +81,7 @@ export default function LoginScreen() {
 
         <Text style={styles.footer}>
           Do not have an account?{" "}
-          <Link href="/(auth)/register" style={styles.link}>
+          <Link href="/auth/register" style={styles.link}>
             Register
           </Link>
         </Text>

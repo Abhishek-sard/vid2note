@@ -23,7 +23,7 @@ interface ButtonProps {
   style?: ViewStyle;
 }
 
- const function Button({
+  export default function Button({
   title,
   onPress,
   loading = false,
@@ -70,4 +70,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default {Button};
