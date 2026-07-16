@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-
 import {
-  View,
-  Text,
   ScrollView,
   StyleSheet,
   Alert,
+  Text,
+  View,
 } from "react-native";
 
-import Input from "@/components/common/Input";
-import Button from "@/components/common/Button";
-
+import GreetingCard from "@/components/home/GreetingCard";
+import HeroCard from "@/components/home/HeroCard";
 import FeatureCard from "@/components/home/FeatureCard";
 import RecentVideo from "@/components/home/RecentVideo";
 
@@ -23,88 +21,56 @@ import {
 import { useVideoStore } from "@/store/videoStore";
 
 export default function HomeScreen() {
-
   const [youtubeUrl, setYoutubeUrl] = useState("");
 
-  const createNotes =
-    useVideoStore(
-      (state) => state.createNotes
-    );
+  const createNotes = useVideoStore(
+    (state) => state.createNotes
+  );
 
-  const loading =
-    useVideoStore(
-      (state) => state.loading
-    );
+  const loading = useVideoStore(
+    (state) => state.loading
+  );
 
-  const generate = async () => {
+  const generateNotes = async () => {
+    if (!youtubeUrl) {
+      Alert.alert(
+        "Validation",
+        "Please paste a YouTube URL."
+      );
+      return;
+    }
 
-    try{
-
+    try {
       await createNotes(
-
         youtubeUrl,
-
         "Temporary Transcript",
-
         "YouTube Video"
-
       );
 
       Alert.alert(
         "Success",
-        "Notes Generated!"
+        "AI Notes Generated!"
       );
-
-    }catch{
-
+    } catch {
       Alert.alert(
         "Error",
         "Generation Failed"
       );
-
     }
-
   };
 
   return (
-
     <ScrollView
       style={styles.container}
       showsVerticalScrollIndicator={false}
     >
+      <GreetingCard username="Abhishek" />
 
-      <Text style={styles.greeting}>
-        👋 Good Morning
-      </Text>
-
-      <Text style={styles.heading}>
-        Learn Smarter with AI
-      </Text>
-
-      <View style={styles.hero}>
-
-        <Text style={styles.heroTitle}>
-          Turn YouTube Videos
-        </Text>
-
-        <Text style={styles.heroSubtitle}>
-          into summaries,
-          flashcards and quizzes
-          in seconds.
-        </Text>
-
-      </View>
-
-      <Input
-        placeholder="Paste YouTube URL..."
-        value={youtubeUrl}
-        onChangeText={setYoutubeUrl}
-      />
-
-      <Button
-        title="Generate AI Notes"
+      <HeroCard
+        youtubeUrl={youtubeUrl}
+        setYoutubeUrl={setYoutubeUrl}
         loading={loading}
-        onPress={generate}
+        onGenerate={generateNotes}
       />
 
       <Text style={styles.section}>
@@ -112,35 +78,31 @@ export default function HomeScreen() {
       </Text>
 
       <View style={styles.grid}>
-
         <FeatureCard
           icon="📄"
           title="Summary"
-          onPress={()=>{}}
+          onPress={() => {}}
         />
 
         <FeatureCard
           icon="🧠"
           title="Flashcards"
-          onPress={()=>{}}
+          onPress={() => {}}
         />
-
       </View>
 
       <View style={styles.grid}>
-
         <FeatureCard
           icon="❓"
           title="MCQs"
-          onPress={()=>{}}
+          onPress={() => {}}
         />
 
         <FeatureCard
-          icon="🗺"
+          icon="🗺️"
           title="Mind Map"
-          onPress={()=>{}}
+          onPress={() => {}}
         />
-
       </View>
 
       <Text style={styles.section}>
@@ -158,61 +120,29 @@ export default function HomeScreen() {
       />
 
       <RecentVideo
-        title="Operating System"
+        title="Operating Systems"
         createdAt="2 Days Ago"
       />
-
     </ScrollView>
-
   );
-
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    padding: Spacing.lg,
+  },
 
-container:{
-flex:1,
-backgroundColor:Colors.background,
-padding:Spacing.lg
-},
+  section: {
+    ...Typography.h3,
+    marginTop: 25,
+    marginBottom: 15,
+    color: Colors.text,
+  },
 
-greeting:{
-...Typography.h3,
-marginTop:40
-},
-
-heading:{
-...Typography.h1,
-marginBottom:20
-},
-
-hero:{
-backgroundColor:Colors.primary,
-padding:20,
-borderRadius:20,
-marginBottom:20
-},
-
-heroTitle:{
-fontSize:24,
-fontWeight:"700",
-color:"white"
-},
-
-heroSubtitle:{
-marginTop:10,
-fontSize:16,
-color:"white"
-},
-
-section:{
-...Typography.h3,
-marginTop:25,
-marginBottom:15
-},
-
-grid:{
-flexDirection:"row"
-}
-
+  grid: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 });
