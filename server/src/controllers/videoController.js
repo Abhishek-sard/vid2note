@@ -36,7 +36,7 @@ const addYoutubeVideo = async (req, res) => {
             });
         }
 
-        const video = new Video.create({
+        const video = await Video.create({
             youtubeUrl,
             videoId,
             createdBy: req.user._id,
@@ -68,10 +68,15 @@ const generateVideoNotes = async (req, res) => {
             keyPoints: notes.keyPoints,
             flashcards: notes.flashcards,
             mcqs: notes.mcqs,
-            createBy: req.user._id,
+            createdBy: req.user._id,
         });
 
-    }catch(error){
+        res.status(201).json({
+            success: true,
+            video,
+            notes,
+        });
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: error.message,

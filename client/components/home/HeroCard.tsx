@@ -27,7 +27,7 @@ export default function HeroCard({
     loading,
 }: HeroProps) {
     return(
-        <view style={styles.card}>
+        <View style={styles.card}>
             <Text style={styles.title}>🎥AI Video Notes</Text>
 
             <Text style={styles.subtitle}>Paste any Youtube link and generate:</Text>
@@ -49,7 +49,7 @@ export default function HeroCard({
               
             </View>
 
-        </view>
+        </View>
     );
 }
 
