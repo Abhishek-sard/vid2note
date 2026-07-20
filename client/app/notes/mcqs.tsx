@@ -54,9 +54,9 @@ const demoQuestions: MCQ[] = [
 export default function MCQScreen(){
     return(
         <ScrollView
-        style={StyleSheet.container}
+        style={styles.container}
         showsVerticalScrollIndicator={false}>
-            <Text style={StyleSheet.title}>
+            <Text style={styles.title}>
                 AI Practice Quiz
             </Text>
 

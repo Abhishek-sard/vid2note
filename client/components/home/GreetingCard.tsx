@@ -1,7 +1,7 @@
 import React from "react";
 import {View, Text, StyleSheet} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import {Colors, Typography, Spacing} from "@/theme";
+import {Colors, Typography} from "@/theme";
 
 interface GreetingCardProps{
     username?:string;

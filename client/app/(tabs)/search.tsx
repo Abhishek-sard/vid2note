@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -18,6 +18,24 @@ import {
   Shadows,
 } from "@/theme";
 
+const sampleSearchResults = [
+  {
+    id: "1",
+    timestamp: "02:15",
+    text: "Binary Search explanation begins here with sorted array assumptions.",
+  },
+  {
+    id: "2",
+    timestamp: "05:40",
+    text: "Example of useState hook and initial state setup.",
+  },
+  {
+    id: "3",
+    timestamp: "08:30",
+    text: "How useEffect dependency array controls re-renders.",
+  },
+];
+
 export default function Search() {
   const [query, setQuery] = useState("");
   const notes = useNotesStore((state) => state.notes);
@@ -28,12 +46,18 @@ export default function Search() {
     fetchNotes();
   }, [fetchNotes]);
 
-  const filteredNotes = notes.filter((note) =>
-    [note.title, note.summary]
-      .join(" ")
-      .toLowerCase()
-      .includes(query.toLowerCase())
+  const filteredNotes = useMemo(
+    () =>
+      notes.filter((note) =>
+        [note.title, note.summary]
+          .join(" ")
+          .toLowerCase()
+          .includes(query.toLowerCase())
+      ),
+    [notes, query]
   );
+
+  const showSearchResults = query.length > 2;
 
   return (
     <ScrollView
@@ -41,37 +65,61 @@ export default function Search() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.heading}>🔎 Search Notes</Text>
+      <Text style={styles.heading}>🔎 Search Inside Video</Text>
+
+      <Text style={styles.subtitle}>
+        Ask a question or search across your generated video notes.
+      </Text>
 
       <TextInput
         style={styles.searchInput}
-        placeholder="Search by title or summary"
+        placeholder="Where was Binary Search explained?"
         placeholderTextColor={Colors.placeholder}
         value={query}
         onChangeText={setQuery}
       />
 
-      {loading && (
-        <Text style={styles.message}>Loading notes...</Text>
+      {loading && <Text style={styles.message}>Loading notes...</Text>}
+
+      {!loading && showSearchResults && (
+        <View style={styles.resultSection}>
+          <Text style={styles.sectionTitle}>AI Answer Results</Text>
+          {sampleSearchResults.map((result) => (
+            <TouchableOpacity
+              key={result.id}
+              style={styles.resultCard}
+              activeOpacity={0.85}
+              onPress={() => router.push("/notes/flashcards")}
+            >
+              <Text style={styles.timestamp}>{result.timestamp}</Text>
+              <Text style={styles.resultText}>{result.text}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       )}
 
-      {!loading && filteredNotes.length === 0 && (
+      {!loading && !showSearchResults && (
         <Text style={styles.message}>
-          No matching notes found. Try a different keyword.
+          Search your notes by question, topic, or keyword.
         </Text>
       )}
 
-      {!loading && filteredNotes.map((note) => (
-        <TouchableOpacity
-          key={note._id}
-          style={styles.card}
-          activeOpacity={0.8}
-          onPress={() => router.push(`/notes/${note._id}`)}
-        >
-          <Text style={styles.cardTitle}>{note.title}</Text>
-          <Text style={styles.cardSubtitle}>{note.summary}</Text>
-        </TouchableOpacity>
-      ))}
+      {!loading && filteredNotes.length > 0 && (
+        <View style={styles.resultSection}>
+          <Text style={styles.sectionTitle}>Related Notes</Text>
+          {filteredNotes.map((note) => (
+            <TouchableOpacity
+              key={note._id}
+              style={styles.card}
+              activeOpacity={0.8}
+              onPress={() => router.push(`/notes/${note._id}`)}
+            >
+              <Text style={styles.cardTitle}>{note.title}</Text>
+              <Text style={styles.cardSubtitle}>{note.summary}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -87,8 +135,13 @@ const styles = StyleSheet.create({
   heading: {
     ...Typography.h2,
     color: Colors.text,
-    marginBottom: Spacing.lg,
     marginTop: 40,
+    marginBottom: Spacing.sm,
+  },
+  subtitle: {
+    ...Typography.body,
+    color: Colors.textSecondary,
+    marginBottom: Spacing.lg,
   },
   searchInput: {
     backgroundColor: Colors.white,
@@ -103,6 +156,30 @@ const styles = StyleSheet.create({
   message: {
     ...Typography.body,
     color: Colors.textSecondary,
+    marginBottom: Spacing.lg,
+  },
+  sectionTitle: {
+    ...Typography.h3,
+    color: Colors.text,
+    marginBottom: Spacing.sm,
+  },
+  resultSection: {
+    marginTop: Spacing.lg,
+  },
+  resultCard: {
+    backgroundColor: Colors.white,
+    borderRadius: Radius.lg,
+    padding: Spacing.lg,
+    marginBottom: Spacing.md,
+    ...Shadows.card,
+  },
+  timestamp: {
+    color: Colors.primary,
+    fontWeight: "700",
+    marginBottom: Spacing.xs,
+  },
+  resultText: {
+    color: Colors.text,
   },
   card: {
     backgroundColor: Colors.white,

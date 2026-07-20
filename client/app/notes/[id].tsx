@@ -2,7 +2,6 @@ import React from "react";
 import {
   ScrollView,
   StyleSheet,
-  View,
   Text,
   TouchableOpacity,
 } from "react-native";
@@ -36,7 +35,7 @@ export default function NoteDetailsScreen() {
       showsVerticalScrollIndicator={false}
     >
       <Text style={styles.pageTitle}>
-        📚 Video Notes
+        📚 Video Notes {id ? `• ${id}` : ""}
       </Text>
 
       <SummaryCard

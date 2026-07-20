@@ -10,14 +10,14 @@ interface Props{
 export default function KeyPointCard({points}: Props){
     return(
         <View style={styles.container}>
-            <Text styles={styles.heading}>⭐ Key Points</Text>
+            <Text style={styles.heading}>⭐ Key Points</Text>
 
-            {points.map((point, index) => {
+            {points.map((point, index) => (
                 <View key={index} style={styles.row}>
                     <Text style={styles.bullet}>•</Text>
                     <Text style={styles.text}>{point}</Text>
                 </View>
-            })}
+            ))}
         </View>
     );
 }

@@ -6,6 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { router } from "expo-router";
 
 import GreetingCard from "@/components/home/GreetingCard";
 import HeroCard from "@/components/home/HeroCard";
@@ -23,47 +24,25 @@ import { useVideoStore } from "@/store/videoStore";
 export default function HomeScreen() {
   const [youtubeUrl, setYoutubeUrl] = useState("");
 
-  const createNotes = useVideoStore(
-    (state) => state.createNotes
-  );
-
-  const loading = useVideoStore(
-    (state) => state.loading
-  );
+  const createNotes = useVideoStore((state) => state.createNotes);
+  const loading = useVideoStore((state) => state.loading);
 
   const generateNotes = async () => {
     if (!youtubeUrl) {
-      Alert.alert(
-        "Validation",
-        "Please paste a YouTube URL."
-      );
+      Alert.alert("Validation", "Please paste a YouTube URL.");
       return;
     }
 
     try {
-      await createNotes(
-        youtubeUrl,
-        "Temporary Transcript",
-        "YouTube Video"
-      );
-
-      Alert.alert(
-        "Success",
-        "AI Notes Generated!"
-      );
+      await createNotes(youtubeUrl, "Temporary Transcript", "YouTube Video");
+      Alert.alert("Success", "AI Notes Generated!");
     } catch {
-      Alert.alert(
-        "Error",
-        "Generation Failed"
-      );
+      Alert.alert("Error", "Generation Failed");
     }
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <GreetingCard username="Abhishek" />
 
       <HeroCard
@@ -73,21 +52,18 @@ export default function HomeScreen() {
         onGenerate={generateNotes}
       />
 
-      <Text style={styles.section}>
-        Quick Features
-      </Text>
+      <Text style={styles.section}>Quick Features</Text>
 
       <View style={styles.grid}>
         <FeatureCard
           icon="📄"
           title="Summary"
-          onPress={() => {}}
+          onPress={() => router.push("/library")}
         />
-
         <FeatureCard
           icon="🧠"
           title="Flashcards"
-          onPress={() => {}}
+          onPress={() => router.push("/notes/flashcards")}
         />
       </View>
 
@@ -95,34 +71,20 @@ export default function HomeScreen() {
         <FeatureCard
           icon="❓"
           title="MCQs"
-          onPress={() => {}}
+          onPress={() => router.push("/notes/mcqs")}
         />
-
         <FeatureCard
           icon="🗺️"
           title="Mind Map"
-          onPress={() => {}}
+          onPress={() => router.push("/notes/mindmap")}
         />
       </View>
 
-      <Text style={styles.section}>
-        Recent Notes
-      </Text>
+      <Text style={styles.section}>Recent Notes</Text>
 
-      <RecentVideo
-        title="Binary Search"
-        createdAt="Today"
-      />
-
-      <RecentVideo
-        title="React Hooks"
-        createdAt="Yesterday"
-      />
-
-      <RecentVideo
-        title="Operating Systems"
-        createdAt="2 Days Ago"
-      />
+      <RecentVideo title="Binary Search" createdAt="Today" />
+      <RecentVideo title="React Hooks" createdAt="Yesterday" />
+      <RecentVideo title="Operating Systems" createdAt="2 Days Ago" />
     </ScrollView>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import {
-  View,
   Text,
   ScrollView,
   TouchableOpacity,

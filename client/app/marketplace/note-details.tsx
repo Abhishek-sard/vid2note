@@ -114,6 +114,11 @@ export default function MarketplaceNoteDetails() {
         <Text style={styles.title}>
           📘 {note.title}
         </Text>
+        {id ? (
+          <Text style={styles.noteId}>
+            Note ID: {id}
+          </Text>
+        ) : null}
 
 
         <Text style={styles.creator}>
