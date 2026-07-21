@@ -6,7 +6,7 @@ const addYoutubeVideo = async (
 )=> {
     const response =
     await api.post(
-        "/videos/youtube",
+        "/video/youtube",
         {
             youtubeUrl
         }
@@ -20,7 +20,7 @@ const generateNotes =
 async(data:any) => {
     const response = 
     await api.post(
-        "/videos/generate",
+        "/video/generate",
         data
     );
 

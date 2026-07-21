@@ -1,7 +1,8 @@
-import ai from "../config/gemini.js";
+import getAI from "../config/gemini.js";
 
 const generateNotes = async (transcript) => {
   try {
+    const ai = getAI();
     const prompt = `
 You are an expert teacher.
 
