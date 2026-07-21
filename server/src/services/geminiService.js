@@ -35,17 +35,15 @@ Transcript:
 ${transcript}
 `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
-    });
-
-    const text = response.text;
+    const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const response = await model.generateContent(prompt);
+    
+    const text = response.response.text();
 
     return JSON.parse(text);
   } catch (error) {
-    console.error(error);
-    throw new Error("Gemini AI Error");
+    console.error("Gemini Error:", error);
+    throw new Error("Failed to generate notes: " + error.message);
   }
 };
 

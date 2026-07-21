@@ -33,14 +33,18 @@ export default function Upload() {
     try {
       await createNotes(
         youtubeUrl,
-        "Uploaded transcript placeholder",
+        youtubeUrl,
         "Uploaded Video"
       );
 
       Alert.alert("Success", "Notes generated from the uploaded video URL.");
       setYoutubeUrl("");
-    } catch {
-      Alert.alert("Upload Failed", "Could not generate notes. Please try again.");
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      const errorMessage = error.response?.data?.message 
+        || error.message 
+        || "Could not generate notes. Please try again.";
+      Alert.alert("Upload Failed", errorMessage);
     }
   };
 

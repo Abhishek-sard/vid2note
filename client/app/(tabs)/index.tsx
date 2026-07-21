@@ -34,10 +34,15 @@ export default function HomeScreen() {
     }
 
     try {
-      await createNotes(youtubeUrl, "Temporary Transcript", "YouTube Video");
+      await createNotes(youtubeUrl, youtubeUrl, "YouTube Video");
       Alert.alert("Success", "AI Notes Generated!");
-    } catch {
-      Alert.alert("Error", "Generation Failed");
+      setYoutubeUrl("");
+    } catch (error) {
+      console.error("Generation error:", error);
+      const errorMessage = error.response?.data?.message 
+        || error.message 
+        || "Generation Failed. Please check if the server is running.";
+      Alert.alert("Error", errorMessage);
     }
   };
 

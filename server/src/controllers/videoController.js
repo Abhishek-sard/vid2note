@@ -2,6 +2,7 @@ import Video from '../models/Video.js';
 import {validationResult} from 'express-validator';
 import {getVideoId} from "../services/youtubeService.js";
 import {generateNotes} from "../services/geminiService.js";
+import {getTranscript} from "../services/transcriptService.js";
 
 
 const addYoutubeVideo = async (req, res) => {
@@ -58,11 +59,41 @@ const addYoutubeVideo = async (req, res) => {
 
 const generateVideoNotes = async (req, res) => {
     try{
-        const {title, transcript} = req.body;
+        const {youtubeUrl, title} = req.body;
+        
+        if (!youtubeUrl) {
+            return res.status(400).json({
+                success: false,
+                message: "YouTube URL is required",
+            });
+        }
+
+        // Extract video ID from URL
+        const videoId = getVideoId(youtubeUrl);
+        if (!videoId) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid YouTube URL",
+            });
+        }
+
+        // Fetch transcript from YouTube
+        const transcript = await getTranscript(videoId);
+        if (!transcript) {
+            return res.status(400).json({
+                success: false,
+                message: "Could not fetch transcript for this video",
+            });
+        }
+
+        // Generate notes using Gemini
         const notes = await generateNotes(transcript);
 
+        // Save to database
         const video = await Video.create({
-            title,
+            title: title || "YouTube Video",
+            youtubeUrl,
+            videoId,
             transcript,
             summary: notes.summary,
             keyPoints: notes.keyPoints,
@@ -73,10 +104,18 @@ const generateVideoNotes = async (req, res) => {
 
         res.status(201).json({
             success: true,
+            data: {
+                title: video.title,
+                summary: notes.summary,
+                keyPoints: notes.keyPoints,
+                flashcards: notes.flashcards,
+                mcqs: notes.mcqs,
+            },
             video,
             notes,
         });
     } catch (error) {
+        console.error("Generate notes error:", error);
         res.status(500).json({
             success: false,
             message: error.message,
