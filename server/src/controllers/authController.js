@@ -41,7 +41,7 @@ const register = async (req, res) => {
             password,
         });
 
-        const accessToken = generateAccessToken(user._id);
+        const accessToken = generateToken(user._id);
         const refreshToken = generateRefreshToken(user._id);
 
 
@@ -109,7 +109,7 @@ const login = async (req, res) => {
             });
         }
 
-        const accessToken = generateAccessToken(user._id);
+        const accessToken = generateToken(user._id);
         const refreshToken = generateRefreshToken(user._id);
 
         user.refreshToken = refreshToken;
