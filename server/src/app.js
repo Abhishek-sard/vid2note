@@ -17,7 +17,28 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(cors({
-    origin: process.env.CLIENT_URI || "http://localhost:3000",
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:8081',
+            'http://192.168.1.77:3000',
+            'http://192.168.1.77:8081',
+            'http://192.168.1.77:5000',
+            'exp://192.168.1.77:8081',
+            'exp://192.168.1.77:19000',
+            'exp://192.168.1.77:19001',
+            'exp://192.168.1.77:19002',
+        ];
+        
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials:true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
