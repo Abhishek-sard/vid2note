@@ -19,6 +19,7 @@ import {
 export default function Library() {
   const notes = useNotesStore((state) => state.notes);
   const loading = useNotesStore((state) => state.loading);
+  const error = useNotesStore((state) => state.error);
   const fetchNotes = useNotesStore((state) => state.fetchNotes);
 
   useEffect(() => {
@@ -37,13 +38,17 @@ export default function Library() {
         <Text style={styles.message}>Loading notes...</Text>
       )}
 
-      {!loading && notes.length === 0 && (
+      {!loading && error && (
+        <Text style={styles.message}>{error}</Text>
+      )}
+
+      {!loading && !error && notes.length === 0 && (
         <Text style={styles.message}>
           No notes found yet. Upload a video or generate notes to see them here.
         </Text>
       )}
 
-      {!loading && notes.map((note) => (
+      {!loading && !error && notes.map((note) => (
         <TouchableOpacity
           key={note._id}
           style={styles.card}

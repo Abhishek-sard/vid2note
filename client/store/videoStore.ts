@@ -50,16 +50,7 @@ interface VideoState {
     try {
       set({ loading: true });
 
-      // Try to add video, but ignore if it already exists
-      try {
-        await addYoutubeVideo(youtubeUrl);
-      } catch (addError: any) {
-        // Ignore "Video already exists" error
-        if (!addError.response?.data?.message?.includes("already exists")) {
-          throw addError;
-        }
-        console.log("Video already exists, proceeding with note generation");
-      }
+      await addYoutubeVideo(youtubeUrl);
 
       const data = await generateNotes({
         youtubeUrl,

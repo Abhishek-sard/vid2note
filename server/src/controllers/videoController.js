@@ -31,9 +31,17 @@ const addYoutubeVideo = async (req, res) => {
         const existing = await Video.findOne({videoId});
 
         if(existing){
-            return res.status(400).json({
+            if (existing.createdBy?.toString() === req.user._id.toString()) {
+                return res.status(200).json({
+                    success: true,
+                    video: existing,
+                    existing: true,
+                });
+            }
+
+            return res.status(409).json({
                 success: false,
-                message: "Video already exists",
+                message: "This video already exists in another account.",
             });
         }
 
@@ -77,6 +85,14 @@ const generateVideoNotes = async (req, res) => {
             });
         }
 
+        const existing = await Video.findOne({videoId});
+        if (existing && existing.createdBy?.toString() !== req.user._id.toString()) {
+            return res.status(409).json({
+                success: false,
+                message: "This video already exists in another account.",
+            });
+        }
+
         // Fetch transcript from YouTube
         const transcript = await getTranscript(videoId);
         if (!transcript) {
@@ -90,17 +106,20 @@ const generateVideoNotes = async (req, res) => {
         const notes = await generateNotes(transcript);
 
         // Save to database
-        const video = await Video.create({
+        const video = existing || new Video({
             title: title || "YouTube Video",
             youtubeUrl,
             videoId,
-            transcript,
-            summary: notes.summary,
-            keyPoints: notes.keyPoints,
-            flashcards: notes.flashcards,
-            mcqs: notes.mcqs,
             createdBy: req.user._id,
         });
+
+        video.title = title || video.title || "YouTube Video";
+        video.transcript = transcript;
+        video.summary = notes.summary;
+        video.keyPoints = notes.keyPoints;
+        video.flashcards = notes.flashcards;
+        video.mcqs = notes.mcqs;
+        await video.save();
 
         res.status(201).json({
             success: true,

@@ -40,6 +40,7 @@ export default function Search() {
   const [query, setQuery] = useState("");
   const notes = useNotesStore((state) => state.notes);
   const loading = useNotesStore((state) => state.loading);
+  const error = useNotesStore((state) => state.error);
   const fetchNotes = useNotesStore((state) => state.fetchNotes);
 
   useEffect(() => {
@@ -81,7 +82,9 @@ export default function Search() {
 
       {loading && <Text style={styles.message}>Loading notes...</Text>}
 
-      {!loading && showSearchResults && (
+      {!loading && error && <Text style={styles.message}>{error}</Text>}
+
+      {!loading && !error && showSearchResults && (
         <View style={styles.resultSection}>
           <Text style={styles.sectionTitle}>AI Answer Results</Text>
           {sampleSearchResults.map((result) => (
@@ -98,13 +101,13 @@ export default function Search() {
         </View>
       )}
 
-      {!loading && !showSearchResults && (
+      {!loading && !error && !showSearchResults && (
         <Text style={styles.message}>
           Search your notes by question, topic, or keyword.
         </Text>
       )}
 
-      {!loading && filteredNotes.length > 0 && (
+      {!loading && !error && filteredNotes.length > 0 && (
         <View style={styles.resultSection}>
           <Text style={styles.sectionTitle}>Related Notes</Text>
           {filteredNotes.map((note) => (

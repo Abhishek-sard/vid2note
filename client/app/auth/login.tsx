@@ -38,9 +38,15 @@ export default function LoginScreen() {
 
       router.replace("/");
     } catch (error: any) {
+      const validationErrors = error?.response?.data?.errors;
       Alert.alert(
         "Login Failed",
-        error?.response?.data?.message || "Something went wrong."
+        error?.response?.data?.message ||
+          (Array.isArray(validationErrors)
+            ? validationErrors.map((item: { msg: string }) => item.msg).join("\n")
+            : null) ||
+          error.message ||
+          "Something went wrong."
       );
     }
   };

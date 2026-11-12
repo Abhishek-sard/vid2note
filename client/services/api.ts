@@ -19,27 +19,23 @@ api.interceptors.request.use(
 
       config.headers = AxiosHeaders.from(config.headers);
 
-      console.log("========== AUTH DEBUG ==========");
-      console.log("Request URL:", config.url);
-      console.log("Request Method:", config.method);
-      console.log("Token exists:", Boolean(token));
-      console.log("Token length:", token?.length || 0);
-
       if (token && token.trim()) {
         config.headers.set(
           "Authorization",
           `Bearer ${token.trim()}`
         );
-
-        console.log("Authorization header attached: YES");
       } else {
         config.headers.delete("Authorization");
 
-        console.log("Authorization header attached: NO");
+        if (
+          config.url?.startsWith("/video/") ||
+          config.url?.startsWith("/notes")
+        ) {
+          return Promise.reject(
+            new Error("Please log in to access your videos and notes.")
+          );
+        }
       }
-
-      console.log("Base URL:", config.baseURL);
-      console.log("================================");
 
       return config;
     } catch (error) {
@@ -47,7 +43,7 @@ api.interceptors.request.use(
       return Promise.reject(error);
     }
   },
-  (error) => {
+  async (error) => {
     console.error("Request interceptor error:", error);
     return Promise.reject(error);
   }
@@ -63,7 +59,7 @@ api.interceptors.response.use(
 
     return response;
   },
-  (error) => {
+  async (error) => {
     console.error("API Error:", {
       status: error.response?.status,
       message: error.response?.data?.message || error.message,
@@ -71,8 +67,17 @@ api.interceptors.response.use(
       data: error.response?.data,
     });
 
-    if (error.response?.status === 401) {
+    if (
+      error.response?.status === 401 &&
+      (error.config?.url?.startsWith("/video/") ||
+        error.config?.url?.startsWith("/notes"))
+    ) {
       console.error("401: Authentication failed. Check the JWT token.");
+      try {
+        await AsyncStorage.removeItem("accessToken");
+      } catch (storageError) {
+        console.error("Unable to clear invalid access token:", storageError);
+      }
     }
 
     return Promise.reject(error);

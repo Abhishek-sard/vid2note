@@ -9,6 +9,7 @@ import notFound from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
 import authRoutes from "./routes/authRoutes.js";
+import noteRoutes from "./routes/noteRoutes.js";
 import videoRoutes from "./routes/videoRoutes.js";
 
 const app = express();
@@ -60,6 +61,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/notes", noteRoutes);
 app.use("/api/video", videoRoutes);
 app.use(notFound);
 app.use(errorHandler);

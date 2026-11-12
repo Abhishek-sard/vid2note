@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import axios from "axios";
 
 import {
   getNotes,
@@ -15,6 +16,7 @@ interface Note {
 interface NotesState {
   notes: Note[];
   loading: boolean;
+  error: string | null;
 
   fetchNotes: () => Promise<void>;
 
@@ -24,10 +26,11 @@ interface NotesState {
  const useNotesStore = create<NotesState>((set) => ({
   notes: [],
   loading: false,
+  error: null,
 
   fetchNotes: async () => {
     try {
-      set({ loading: true });
+      set({ loading: true, error: null });
 
       const data = await getNotes();
 
@@ -36,7 +39,13 @@ interface NotesState {
         loading: false,
       });
     } catch (error) {
-      set({ loading: false });
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : error instanceof Error
+          ? error.message
+          : "Could not load notes.";
+
+      set({ loading: false, error: message });
     }
   },
 
