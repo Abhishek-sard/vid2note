@@ -1,33 +1,41 @@
+
 import api from "./api";
 
-//Add youtube video
-const addYoutubeVideo = async (
-    youtubeUrl: String
-)=> {
-    const response =
-    await api.post(
-        "/video/youtube",
-        {
-            youtubeUrl
-        }
-    );
+// Add YouTube video
+const addYoutubeVideo = async (youtubeUrl: string) => {
+  try {
+    const response = await api.post("/video/youtube", {
+      youtubeUrl: youtubeUrl.trim(),
+    });
+
     return response.data;
+  } catch (error: any) {
+    console.error(
+      "Add YouTube Video Error:",
+      error.response?.data || error.message
+    );
+
+    throw error;
+  }
 };
 
-
-//Generate AI Notes
-const generateNotes = 
-async(data:any) => {
-    const response = 
-    await api.post(
-        "/video/generate",
-        data
-    );
+// Generate AI notes
+const generateNotes = async (data: any) => {
+  try {
+    const response = await api.post("/video/generate", data);
 
     return response.data;
-}
+  } catch (error: any) {
+    console.error(
+      "Generate Notes Error:",
+      error.response?.data || error.message
+    );
+
+    throw error;
+  }
+};
 
 export {
-    addYoutubeVideo,
-    generateNotes
-}
+  addYoutubeVideo,
+  generateNotes,
+};

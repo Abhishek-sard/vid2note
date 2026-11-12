@@ -1,48 +1,61 @@
-import api from './api';
 
-//Register
-const registerUser = async (data:any) => {
-    const response = await api.post(
-        "/auth/register",
-        data
-    );
-    return response.data;
+import api from "./api";
+
+export interface AuthResponse {
+  success: boolean;
+  message: string;
+  accessToken: string;
+  refreshToken?: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+}
+
+// Register
+const registerUser = async (data: {
+  name: string;
+  email: string;
+  password: string;
+}): Promise<AuthResponse> => {
+  const response = await api.post<AuthResponse>(
+    "/auth/register",
+    data
+  );
+
+  return response.data;
 };
 
-//login
-const loginUser = async (data:any) => {
-    const response = await api.post(
-        "/auth/login",
-        data
-    );
-    return response.data;
+// Login
+const loginUser = async (data: {
+  email: string;
+  password: string;
+}): Promise<AuthResponse> => {
+  const response = await api.post<AuthResponse>(
+    "/auth/login",
+    data
+  );
+
+  return response.data;
 };
 
-
-//logout
-const logoutUser = async() => {
-    const response =
-    await api.post(
-        "/auth/logout"
-    );
-
-    return response.data;
+// Logout
+const logoutUser = async () => {
+  const response = await api.post("/auth/logout");
+  return response.data;
 };
 
-//current user
+// Get current user
 const getMe = async () => {
-    const response = 
-    await api.get(
-        "/auth/me"
-    );
-
-    return response.data;
+  const response = await api.get("/auth/me");
+  return response.data;
 };
 
 export {
-    registerUser,
-    loginUser,
-    logoutUser,
-    getMe
-}
-
+  registerUser,
+  loginUser,
+  logoutUser,
+  getMe,
+};

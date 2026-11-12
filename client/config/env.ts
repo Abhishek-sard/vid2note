@@ -23,14 +23,7 @@
  */
 
 const ENV = {
-    // Change this based on your environment (see instructions above)
-    // API_URL: "http://localhost:5000/api",
-    
-    // For Android Emulator, uncomment:
-    // API_URL: "http://10.0.2.2:5000/api",
-    
-    // For Physical Device/Expo Go, replace 192.168.1.77 with your machine's IP:
-    API_URL: "http://192.168.1.77:5000/api",
+  API_URL: "http://192.168.1.79:5000/api",
 };
 
 export default ENV;
