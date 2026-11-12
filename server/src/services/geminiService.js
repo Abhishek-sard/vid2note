@@ -36,10 +36,18 @@ Transcript:
 ${transcript}
 `;
 
-    const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const response = await model.generateContent(prompt);
-    
-    const text = response.response.text();
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+      },
+    });
+
+    const text = response.text;
+    if (!text) {
+      throw new Error("Gemini returned an empty response.");
+    }
 
     return JSON.parse(text);
   } catch (error) {
