@@ -51,8 +51,17 @@ ${transcript}
 
     return JSON.parse(text);
   } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (/API_KEY_INVALID|API key not valid/i.test(message)) {
+      const configError = new Error(
+        "Gemini API key is invalid. Configure a valid GEMINI_API_KEY in server/.env and restart the server."
+      );
+      configError.code = "GEMINI_API_KEY_INVALID";
+      throw configError;
+    }
+
     console.error("Gemini Error:", error);
-    throw new Error("Failed to generate notes: " + error.message);
+    throw new Error("Failed to generate notes: " + message);
   }
 };
 

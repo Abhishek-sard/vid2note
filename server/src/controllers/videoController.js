@@ -135,7 +135,7 @@ const generateVideoNotes = async (req, res) => {
         });
     } catch (error) {
         console.error("Generate notes error:", error);
-        res.status(500).json({
+        res.status(error.code === "GEMINI_API_KEY_INVALID" ? 503 : 500).json({
             success: false,
             message: error.message,
         });
