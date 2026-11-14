@@ -20,6 +20,7 @@ npm start
 ```
 
 Replace `192.168.1.100` with the computer's current LAN IPv4 address when using a physical device. The device and computer must be on the same network.
+If Expo is started with `--tunnel`, the Expo host may not be the API server. Set `EXPO_PUBLIC_API_URL` to the computer's LAN address instead. For a custom Android development or production build, rebuild the app after changing its network settings.
 
 ## 🧪 Testing Connection
 
@@ -38,6 +39,8 @@ Invoke-RestMethod http://localhost:5000/
 ```
 
 The root endpoint should return a JSON message indicating the API is running.
+
+For a physical device, open `http://<computer-LAN-IP>:5000/` in the device browser. If it does not load, check that Windows Firewall permits inbound TCP traffic on port 5000 for the Private network profile. The Android app is configured to allow HTTP for this local development API; use HTTPS and disable cleartext traffic before shipping a production server.
 
 ## 📋 Checklist
 
